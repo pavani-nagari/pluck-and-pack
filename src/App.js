@@ -1,37 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; // Notice the use of Navigate
 import Welcome from './components/Welcome';
-import React,{Component} from 'react';
-import { useState } from 'react';
 import ListShoppers from './components/ListShoppers';
+import Aldi from './components/Aldi';
+import PaymentPage from './components/payments';
+import Walmart from './components/Walmart';
+import Login from './components/login';
+import Wendys from './components/Wendys';
+import PatelBrothers from './components/Patelbrothers';
+import Walgreens from './components/Walgreens';
 
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isShopping, setIsShopping] = useState(false);
 
-class App extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShopping: false,
-    };
-  }
-
-  // Event handler to toggle shopping state
-  handleStartShopping = () => {
-    this.setState({ isShopping: true });
+  const handleLogin = () => {
+    setIsLoggedIn(true);  // Login successful
   };
 
-  render() {
-    return (
-      <div class="App">
-          {/* Conditionally render components based on state */}
-          {this.state.isShopping ? (
-            <ListShoppers />
-          ) : (
-            <Welcome onStartShopping={this.handleStartShopping} />
-          )}
-      </div>
-    );
-  }
+  const handleStartShopping = () => {
+    setIsShopping(true);  // User has started shopping
+  };
+  document.body.style.backgroundColor = '#ffe8f5';
 
-}
+  return (
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Route for Login page (this is the home page) */}
+          <Route path="/" element={<Login onLogin={handleLogin} />} />
+
+          {/* Protected Route for Dashboard */}
+          <Route
+            path="/dashboard"
+            element={isLoggedIn ? (
+              isShopping ? <ListShoppers /> : <Welcome onStartShopping={handleStartShopping} />
+            ) : (
+              <Navigate to="/" />  // Redirect to login page if not logged in
+            )}
+          />
+
+          {/* Other routes */}
+          <Route path="/aldi" element={<Aldi />} />
+          <Route path="/walgreens" element={<Walgreens />} />
+          <Route path="/walmart" element={<Walmart />} />
+          <Route path="/wendys" element={<Wendys />} />
+          <Route path="/patelbrothers" element={<PatelBrothers />} />
+          <Route path="/payment" element={<PaymentPage />} />
+
+          {/* Redirect to login page for any unrecognized paths */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
 
 export default App;

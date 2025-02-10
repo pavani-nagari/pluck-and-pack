@@ -1,44 +1,98 @@
-import React, { Component } from 'react';
+import React from "react";
+import { Typography, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-class ListShoppers extends Component {
-  render() {
-    return (
-      <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#e8f5e9' }}>
-        <h1 style={{ color: '#3F51B5' }}>Welcome to the Shop!</h1>
-        <p>Explore our wide range of products and start shopping now!</p>
+const ListShoppers = () => {
+  const navigate = useNavigate();
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px', flexWrap: 'wrap' }}>
-    <img 
-      src="C:\Users\pavan\OneDrive\Documents\MyProjects\pluck-and-pack\ALDI_2017.png" 
-      alt="Aldi" 
-      style={{ width: '150px', height: '150px', borderRadius: '10px', cursor: 'pointer' }}
-    />
+  const stores = [
+    { src: "/ALDI_2017.png", alt: "Aldi", route: "/aldi" },
+    { src: "/Walgreens-Logo.png", alt: "Walgreens", route: "/walgreens"},
+    { src: "/Wendy's_full_logo_2012.svg.png", alt: "Wendy's", route:"/wendys" },
+    { src: "/Walmart-Logo.png", alt: "Walmart", route: "/walmart" },
+    { src: "/patelbrothers.png", alt: "Indian Store",  route: "/patelbrothers" },
+  ];
 
-    <img 
-      src="C:\Users\pavan\OneDrive\Documents\MyProjects\pluck-and-pack\Walgreens-Logo.png" 
-      alt="Walgreens" 
-      style={{ width: '150px', height: '150px', borderRadius: '10px', cursor: 'pointer' }}
-    />
-    <img 
-      src="C:\Users\pavan\OneDrive\Documents\MyProjects\pluck-and-pack\Wendy's_full_logo_2012.svg.png" 
-      alt="Wendys" 
-      style={{ width: '150px', height: '150px', borderRadius: '10px', cursor: 'pointer' }}
-    />
-    <img 
-      src="C:\Users\pavan\OneDrive\Documents\MyProjects\pluck-and-pack\Walmart-Logo.png" 
-      alt="Walmart" 
-      style={{ width: '150px', height: '150px', borderRadius: '10px', cursor: 'pointer' }}
-    />
-    <img 
-      src = "C:\Users\pavan\OneDrive\Documents\MyProjects\pluck-and-pack\patelbrothers.png"
-      alt="Indian Store" 
-      style={{ width: '150px', height: '150px', borderRadius: '10px', cursor: 'pointer' }}
-    />
-  </div>
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      backgroundColor: "#f7f7f7",
+      textAlign: "center",
+      padding: "30px",
+    },
+    title: {
+      fontSize: "2.5rem",
+      color: "#3F51B5",
+      marginBottom: "10px",
+      fontWeight: "bold",
+    },
+    description: {
+      fontSize: "1.2rem",
+      color: "#666",
+      marginBottom: "30px",
+    },
+    gridContainer: {
+      maxWidth: "1200px",
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    storeCard: {
+      cursor: "pointer",
+      border: "2px solid #ddd",
+      borderRadius: "12px",
+      padding: "15px",
+      textAlign: "center",
+      backgroundColor: "white",
+      transition: "all 0.3s ease-in-out",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    },
+    storeImage: {
+      width: "100%",
+      height: "150px",
+      objectFit: "contain",
+      transition: "transform 0.3s ease-in-out",
+    },
+    storeCardHover: {
+      transform: "scale(1.05)",
+      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)",
+    },
+  };
 
-      </div>
-    );
-  }
-}
+  return (
+    <div style={styles.container}>
+      <Typography style={styles.title}>Welcome to the Shop! 🛍️</Typography>
+      <Typography style={styles.description}>
+        Explore our wide range of products and start shopping now!
+      </Typography>
+
+      <Grid container spacing={3} style={styles.gridContainer}>
+        {stores.map((store, index) => (
+          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+            <div
+              style={styles.storeCard}
+              onMouseEnter={(e) =>
+                Object.assign(e.currentTarget.style, styles.storeCardHover)
+              }
+              onMouseLeave={(e) =>
+                Object.assign(e.currentTarget.style, styles.storeCard)
+              }
+              onClick={() => store.route && navigate(store.route)}
+            >
+              <img src={store.src} alt={store.alt} style={styles.storeImage} />
+              <Typography variant="h6" sx={{ mt: 2, color: "#444" }}>
+                {store.alt}
+              </Typography>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
 
 export default ListShoppers;
